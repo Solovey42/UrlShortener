@@ -1,5 +1,7 @@
+using API.Domain.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,7 +15,20 @@ namespace API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<LinksContext>();
+                //Перенести в отдельный класс
+                if (!context.Links.Any())
+                {
+                    context.Links.Add(new Link { LongAddress = "www.google.com", Token = "fa31" });
+                    context.Links.Add(new Link { LongAddress = "www.drom.ru", Token = "nhtr3" });
+                    context.SaveChanges();
+                }
+            }
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

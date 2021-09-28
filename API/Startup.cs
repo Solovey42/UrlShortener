@@ -1,4 +1,6 @@
 using API.Domain.Models;
+using API.Domain.Repositories;
+using API.Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,8 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ILinkRepository, LinkRepository>();
+            services.AddScoped<ILinkService, LinkService>();
             services.AddEntityFrameworkSqlite().AddDbContext<LinksContext>();
             services.AddControllers();
             services.AddSwaggerGen(c =>

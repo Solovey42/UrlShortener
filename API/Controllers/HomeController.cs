@@ -1,9 +1,8 @@
 ﻿using API.Domain.Models;
+using API.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -12,32 +11,28 @@ namespace API.Controllers
     [Route("[controller]")]
     public class HomeController : ControllerBase
     {
-        LinksContext db;
-
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, LinksContext context)
+        private readonly ILinkService _linkService;
+
+        public HomeController(ILogger<HomeController> logger, /*LinksContext context, */ ILinkService linkService)
         {
             _logger = logger;
-            db = context;
-            if (!db.Links.Any())
-            {
-                db.Links.Add(new Link { LongAddress = "www.google.com", Token = "fa31" });
-                db.Links.Add(new Link { LongAddress = "www.drom.ru", Token = "nhtr3" });
-                db.SaveChanges();
-            }
+            _linkService = linkService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Link>>> Get()
+        public async Task<IEnumerable<Link>> Get()
         {
-            return await db.Links.ToListAsync();
+            ///return await _context.Links.ToListAsync();
+            var links = await _linkService.ListAsync();
+            return links;
         }
 
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public async Task<ActionResult<Link>> Get(int id)
         {
-            Link link = await db.Links.FirstOrDefaultAsync(x => x.Id == id);
+            Link link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
             if (link == null)
                 return NotFound();
             return new ObjectResult(link);
@@ -51,8 +46,8 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            db.Links.Add(link);
-            await db.SaveChangesAsync();
+            _context.Links.Add(link);
+            await _context.SaveChangesAsync();
             return Ok(link);
         }
 
@@ -63,27 +58,27 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            if (!db.Links.Any(x => x.Id == link.Id))
+            if (!_context.Links.Any(x => x.Id == link.Id))
             {
                 return NotFound();
             }
 
-            db.Update(link);
-            await db.SaveChangesAsync();
+            _context.Update(link);
+            await _context.SaveChangesAsync();
             return Ok(link);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Link>> Delete(int id)
         {
-            Link link = db.Links.FirstOrDefault(x => x.Id == id);
+            Link link = _context.Links.FirstOrDefault(x => x.Id == id);
             if (link == null)
             {
                 return NotFound();
             }
-            db.Links.Remove(link);
-            await db.SaveChangesAsync();
+            _context.Links.Remove(link);
+            await _context.SaveChangesAsync();
             return Ok(link);
-        }
+        }*/
     }
 }
