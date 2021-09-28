@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Models\" />
     <Folder Include="Domain\Services\" />
     <Folder Include="wwwroot\Views\" />
   </ItemGroup>
