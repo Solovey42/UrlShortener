@@ -25,59 +25,62 @@ namespace API.Controllers
         public async Task<IEnumerable<Link>> Get()
         {
             ///return await _context.Links.ToListAsync();
-            var links = await _linkService.ListAsync();
+            var links = await _linkService.GetLinksAsync();
             return links;
         }
 
-        /*[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Link>> Get(int id)
         {
-            Link link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
+            ///Link link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
+            var link = await _linkService.GetLinkByIdAsync(id);
             if (link == null)
                 return NotFound();
             return new ObjectResult(link);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Link>> Post(Link link)
+        public ActionResult<Link> Post(Link link)
         {
             if (link == null)
             {
                 return BadRequest();
             }
-
-            _context.Links.Add(link);
-            await _context.SaveChangesAsync();
+            ///_context.Links.Add(link);
+            ///await _context.SaveChangesAsync();
+            _linkService.AddLinkAsync(link);
             return Ok(link);
         }
 
-        [HttpPut]
+/*        [HttpPut]
         public async Task<ActionResult<Link>> Put(Link link)
         {
             if (link == null)
             {
                 return BadRequest();
             }
-            if (!_context.Links.Any(x => x.Id == link.Id))
+            if (*//*!_context.Links.Any(x => x.Id == link.Id)*//*_linkService.Contains(link))
             {
                 return NotFound();
             }
-
-            _context.Update(link);
-            await _context.SaveChangesAsync();
+            ///_context.Update(link);
+            ///await _context.SaveChangesAsync();
+            _linkService.Put(link);
             return Ok(link);
-        }
+        }*/
 
-        [HttpDelete("{id}")]
+/*        [HttpDelete("{id}")]
         public async Task<ActionResult<Link>> Delete(int id)
         {
-            Link link = _context.Links.FirstOrDefault(x => x.Id == id);
+            ///Link link = _context.Links.FirstOrDefault(x => x.Id == id);
+            var link = _linkService.Get(id); ///////////////////////////////////////////////тут не работает потому что возвращается Task
             if (link == null)
             {
                 return NotFound();
             }
-            _context.Links.Remove(link);
-            await _context.SaveChangesAsync();
+            //_context.Links.Remove(link);
+            //await _context.SaveChangesAsync();
+            _linkService.Delete(link); 
             return Ok(link);
         }*/
     }
