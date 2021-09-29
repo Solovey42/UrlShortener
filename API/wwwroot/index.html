@@ -3,31 +3,33 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Список ccskjr</title>
+    <title>Сервис минификации</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <h2>Сервис минификации</h2>
-    <form name="linkForm">
-        <input type="hidden" name="id" value="0" />
-        <div class="form-group col-md-5">
-            <label for="longAddress">Ваша ссылка:</label>
-            <input class="form-control" name="longAddress" />
-        </div>
-        <div class="form-group col-md-5">
-            <label for="token">Короткая ссылка:</label>
-            <input class="form-control" name="token" />
-        </div>
-        <div class="panel-body">
-            <button type="submit" id="submit" class="btn btn-primary">Сохранить</button>
-            <a id="reset" class="btn btn-primary">Сбросить</a>
-        </div>
-    </form>
-    <table class="table table-condensed table-striped  col-md-6">
-        <thead><tr><th>Id</th><th>Ссылка</th><th>Ключ</th><th></th></tr></thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="text-center">
+        <h2>Сервис минификации</h2>
+        <form name="linkForm">
+            <input type="hidden" name="id" value="0" />
+            <div class="form-group col-md-auto">
+                <label for="longAddress">Ваша ссылка:</label>
+                <input class="form-control" name="longAddress" />
+            </div>
+            <div class="form-group col-md-auto">
+                <label for="token">Короткая ссылка:</label>
+                <input class="form-control" name="token" />
+            </div>
+            <div class="panel-body">
+                <button type="submit" id="submit" class="btn btn-primary">Сохранить</button>
+                <a id="reset" class="btn btn-primary">Сбросить</a>
+            </div>
+        </form>
+        <table class="table table-condensed table-striped ">
+            <thead><tr><th>Id</th><th>Ссылка</th><th>Ключ</th><th></th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     <script>
         // Получение всех соответствий ссылок
         async function GetLinks() {
@@ -75,7 +77,7 @@
                 const form = document.forms["linkForm"];
                 //form.elements["id"].value = link.id;
                 form.elements["longAddress"].value = link.longAddress;
-                form.elements["token"].value = window.location.origin+"/"+link.token;
+                form.elements["token"].value = window.location.origin + "/" + link.token;
 
             }
         }

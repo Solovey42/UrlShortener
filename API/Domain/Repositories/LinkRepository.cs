@@ -37,6 +37,11 @@ namespace API.Domain.Repositories
             return link;
         }
 
+        public async Task<Link> LinkByTokenAsync(string token)
+        {
+            return await _context.Links.FirstOrDefaultAsync(x => x.Token == token);
+        }
+
 
         /*        public async void Delete(Task<Link> link)
                 {

@@ -43,9 +43,13 @@ namespace API.Controllers
         [HttpGet("{token}")]
         public IActionResult Get(string token)
         {
-            var hostUrl = Request.Scheme + "://" + Request.Host.Value;
-
-            return Redirect("http://microsoft.com");
+            ///var hostUrl = Request.Scheme + "://" + Request.Host.Value;
+            string longAddress = _linkService.GetLongAddressAsync(token);
+            if (longAddress == null)
+            {
+                return NotFound();
+            }
+            return Redirect(_linkService.GetLongAddressAsync(token));
         }
 
         [HttpPost("addLink/{*longAddress}")]

@@ -21,15 +21,30 @@ namespace API.Domain.Services
         public Task<Link> GetLinkByIdAsync(int id)
         {
             var link = _linkRepository.LinkByIdAsync(id);
-            if (link == null)
+            if (link.Result == null)
                 return null;
             return link;
         }
         public Task<Link> AddLinkAsync(string longAddress)
         {
-            var link = new Link { LongAddress = longAddress, Token = Generate() };
+            Link link;
+            if (!longAddress.StartsWith("https://"))
+            {
+                link = new Link { LongAddress = "https://"+longAddress, Token = Generate() };
+            }
+            else
+            {
+                link = new Link { LongAddress = longAddress, Token = Generate() };
+            }
             return _linkRepository.AddLinkAsync(link);
 
+        }
+        public string GetLongAddressAsync(string token)
+        {
+            var link = _linkRepository.LinkByTokenAsync(token);
+            if (link.Result == null)
+                return null;
+            return link.Result.LongAddress;
         }
         public bool Contains(Link link)
         {

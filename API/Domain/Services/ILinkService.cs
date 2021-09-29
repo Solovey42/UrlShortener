@@ -9,6 +9,8 @@ namespace API.Domain.Services
         Task<IEnumerable<Link>> GetLinksAsync();
         Task<Link> GetLinkByIdAsync(int id);
         Task<Link> AddLinkAsync(string longAddress);
+        string GetLongAddressAsync(string token);
+
         ///void Put(Link link);
         ///void Delete(Task<Link> link);
         bool Contains( Link link);
