@@ -20,7 +20,6 @@ namespace API
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<LinksContext>();
-                //Перенести в отдельный класс
                 if (!context.Links.Any())
                 {
                     context.Links.Add(new Link { LongAddress = "https://www.google.com", Token = "fa31" });

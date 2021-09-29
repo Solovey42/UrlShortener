@@ -28,18 +28,25 @@ namespace API.Domain.Services
         }
         public async Task<Link> AddLinkAsync(string longAddress)
         {
-            var link = await _linkRepository.Contains(longAddress);
-            if (link!=null)
-            {
-                return link; 
-
-            }
+            Link link;   
             if (!longAddress.StartsWith("https://"))
             {
+                link = await _linkRepository.Contains("https://"+longAddress);
+                if (link != null)
+                {
+                    return link;
+
+                }
                 link = new Link { LongAddress = "https://"+longAddress, Token = Generate() };
             }
             else
             {
+                link = await _linkRepository.Contains(longAddress);
+                if (link != null)
+                {
+                    return link;
+
+                }
                 link = new Link { LongAddress = longAddress, Token = Generate() };
             }
             return await _linkRepository.AddLinkAsync(link);
