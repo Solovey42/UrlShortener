@@ -8,7 +8,7 @@ namespace API.Domain.Services
     {
         Task<IEnumerable<Link>> GetLinksAsync();
         Task<Link> GetLinkByIdAsync(int id);
-        void AddLinkAsync(Link link);
+        Task<Link> AddLinkAsync(string longAddress);
         ///void Put(Link link);
         ///void Delete(Task<Link> link);
         bool Contains( Link link);

@@ -1,5 +1,6 @@
 ﻿using API.Domain.Models;
 using API.Domain.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,9 +25,10 @@ namespace API.Domain.Services
                 return null;
             return link;
         }
-        public void AddLinkAsync(Link link)
+        public Task<Link> AddLinkAsync(string longAddress)
         {
-            _linkRepository.AddLinkAsync(link);
+            var link = new Link { LongAddress = longAddress, Token = Generate() };
+            return _linkRepository.AddLinkAsync(link);
 
         }
         public bool Contains(Link link)
@@ -42,7 +44,14 @@ namespace API.Domain.Services
 
         public string Generate()
         {
-            throw new System.NotImplementedException();
+            Random rd = new Random();
+            const string allowedChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+            char[] chars = new char[7];
+            for (int i = 0; i < 7; i++)
+            {
+                chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+            }
+            return new string(chars);
         }
 
 

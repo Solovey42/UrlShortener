@@ -30,10 +30,11 @@ namespace API.Domain.Repositories
             return await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async void AddLinkAsync(Link link)
+        public async Task<Link> AddLinkAsync(Link link)
         {
             _context.Links.Add(link);
             await _context.SaveChangesAsync();
+            return link;
         }
 
 

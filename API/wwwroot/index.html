@@ -7,15 +7,15 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <h2>Список пользователей</h2>
+    <h2>Сервис минификации</h2>
     <form name="linkForm">
         <input type="hidden" name="id" value="0" />
         <div class="form-group col-md-5">
-            <label for="longAddress">Ссылка:</label>
+            <label for="longAddress">Ваша ссылка:</label>
             <input class="form-control" name="longAddress" />
         </div>
         <div class="form-group col-md-5">
-            <label for="token">Ключ:</label>
+            <label for="token">Короткая ссылка:</label>
             <input class="form-control" name="token" />
         </div>
         <div class="panel-body">
@@ -32,7 +32,7 @@
         // Получение всех соответствий ссылок
         async function GetLinks() {
             // отправляет запрос и получаем ответ
-            const response = await fetch("/home", {
+            const response = await fetch("/getLinks", {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -49,7 +49,7 @@
         }
         // Получение одного соответсвия ссылки и токена
         async function GetLink(id) {
-            const response = await fetch("/home/" + id, {
+            const response = await fetch("/getLink/" + id, {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -62,20 +62,21 @@
             }
         }
         // Добавление ссылки и токена
-        async function CreateLink(linkLongAddress, linkToken) {
+        async function CreateLink(longAddress) {
 
-            const response = await fetch("/home", {
+            const response = await fetch("/addLink/" + longAddress, {
                 method: "POST",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    longAddress: linkLongAddress,
-                    token: linkToken
-                })
             });
             if (response.ok === true) {
                 const link = await response.json();
                 reset();
                 document.querySelector("tbody").append(row(link));
+                const form = document.forms["linkForm"];
+                //form.elements["id"].value = link.id;
+                form.elements["longAddress"].value = link.longAddress;
+                form.elements["token"].value = window.location.origin+"/"+link.token;
+
             }
         }
         // Изменение ссылки и токена

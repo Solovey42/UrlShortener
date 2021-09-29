@@ -2,13 +2,15 @@
 using API.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("")]
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,7 +23,7 @@ namespace API.Controllers
             _linkService = linkService;
         }
 
-        [HttpGet]
+        [HttpGet("getLinks")]
         public async Task<IEnumerable<Link>> Get()
         {
             ///return await _context.Links.ToListAsync();
@@ -29,7 +31,7 @@ namespace API.Controllers
             return links;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getLink/{id}")]
         public async Task<ActionResult<Link>> Get(int id)
         {
             ///Link link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
@@ -38,17 +40,24 @@ namespace API.Controllers
                 return NotFound();
             return new ObjectResult(link);
         }
-
-        [HttpPost]
-        public ActionResult<Link> Post(Link link)
+        [HttpGet("{token}")]
+        public IActionResult Get(string token)
         {
-            if (link == null)
+            var hostUrl = Request.Scheme + "://" + Request.Host.Value;
+
+            return Redirect("http://microsoft.com");
+        }
+
+        [HttpPost("addLink/{*longAddress}")]
+        public async Task<ActionResult<Link>> Post(string longAddress)
+        {
+            if (longAddress == null)
             {
                 return BadRequest();
             }
             ///_context.Links.Add(link);
             ///await _context.SaveChangesAsync();
-            _linkService.AddLinkAsync(link);
+            var link = await _linkService.AddLinkAsync(longAddress);
             return Ok(link);
         }
 
