@@ -13,12 +13,9 @@ namespace API.Domain.Repositories
 
         }
 
-        public bool Contains(Link link)
+        public async Task<Link> Contains(string longAddress)
         {
-            if (_context.Links.Any(x => x.Id == link.Id))
-                return true;
-            else
-                return false;
+            return await _context.Links.FirstOrDefaultAsync(x => x.LongAddress == longAddress);
         }
 
         public async Task<IEnumerable<Link>> ListAsync()

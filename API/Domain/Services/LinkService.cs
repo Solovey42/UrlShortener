@@ -2,6 +2,7 @@
 using API.Domain.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Domain.Services
@@ -25,9 +26,14 @@ namespace API.Domain.Services
                 return null;
             return link;
         }
-        public Task<Link> AddLinkAsync(string longAddress)
+        public async Task<Link> AddLinkAsync(string longAddress)
         {
-            Link link;
+            var link = await _linkRepository.Contains(longAddress);
+            if (link!=null)
+            {
+                return link; 
+
+            }
             if (!longAddress.StartsWith("https://"))
             {
                 link = new Link { LongAddress = "https://"+longAddress, Token = Generate() };
@@ -36,7 +42,7 @@ namespace API.Domain.Services
             {
                 link = new Link { LongAddress = longAddress, Token = Generate() };
             }
-            return _linkRepository.AddLinkAsync(link);
+            return await _linkRepository.AddLinkAsync(link);
 
         }
         public string GetLongAddressAsync(string token)
@@ -45,10 +51,6 @@ namespace API.Domain.Services
             if (link.Result == null)
                 return null;
             return link.Result.LongAddress;
-        }
-        public bool Contains(Link link)
-        {
-            return _linkRepository.Contains(link);
         }
 
 /*        public void Delete(Task<Link> link)

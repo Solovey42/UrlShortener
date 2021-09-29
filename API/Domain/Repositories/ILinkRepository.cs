@@ -12,6 +12,6 @@ namespace API.Domain.Repositories
         Task<Link> LinkByTokenAsync(string token);
         ///void Put(Link link);
         ///void Delete(Task<Link> link);
-        bool Contains(Link link);
+        Task<Link> Contains(string longAddress);
     }
 }

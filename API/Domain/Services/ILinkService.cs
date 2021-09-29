@@ -13,7 +13,6 @@ namespace API.Domain.Services
 
         ///void Put(Link link);
         ///void Delete(Task<Link> link);
-        bool Contains( Link link);
         string Generate();
     }
 }

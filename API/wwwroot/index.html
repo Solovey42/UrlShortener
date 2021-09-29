@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="text-center">
-        <h2>Сервис минификации</h2>
+        <h2>Сервис минификации ссылок</h2>
         <form name="linkForm">
             <input type="hidden" name="id" value="0" />
             <div class="form-group col-md-auto">
@@ -17,11 +17,11 @@
             </div>
             <div class="form-group col-md-auto">
                 <label for="token">Короткая ссылка:</label>
-                <input class="form-control" name="token" />
+                <input disabled class="form-control" name="token" />
             </div>
             <div class="panel-body">
-                <button type="submit" id="submit" class="btn btn-primary">Сохранить</button>
-                <a id="reset" class="btn btn-primary">Сбросить</a>
+                <button type="submit" id="submit" class="btn btn-primary col-md-6">Сохранить</button>
+                <a hidden id="reset" class="btn btn-primary">Сбросить</a>
             </div>
         </form>
         <table class="table table-condensed table-striped ">
@@ -75,7 +75,6 @@
                 reset();
                 document.querySelector("tbody").append(row(link));
                 const form = document.forms["linkForm"];
-                //form.elements["id"].value = link.id;
                 form.elements["longAddress"].value = link.longAddress;
                 form.elements["token"].value = window.location.origin + "/" + link.token;
 

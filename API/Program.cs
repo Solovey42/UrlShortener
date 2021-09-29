@@ -23,8 +23,8 @@ namespace API
                 //Перенести в отдельный класс
                 if (!context.Links.Any())
                 {
-                    context.Links.Add(new Link { LongAddress = "www.google.com", Token = "fa31" });
-                    context.Links.Add(new Link { LongAddress = "www.drom.ru", Token = "nhtr3" });
+                    context.Links.Add(new Link { LongAddress = "https://www.google.com", Token = "fa31" });
+                    context.Links.Add(new Link { LongAddress = "https://www.drom.ru", Token = "nhtr3" });
                     context.SaveChanges();
                 }
             }
