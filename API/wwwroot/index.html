@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Сервис минификации</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="text-center">
+        <h2>Сервис минификации ссылок</h2>
+        <form name="linkForm">
+            <input type="hidden" name="id" value="0" />
+            <div class="form-group col-md-auto">
+                <label for="longAddress">Ваша ссылка:</label>
+                <input class="form-control" name="longAddress" />
+            </div>
+            <div class="form-group col-md-auto">
+                <label for="token">Короткая ссылка:</label>
+                <input disabled class="form-control" name="token" />
+            </div>
+            <div class="panel-body">
+                <button type="submit" id="submit" class="btn btn-primary col-md-6">Сохранить</button>
+                <a hidden id="reset" class="btn btn-primary">Сбросить</a>
+            </div>
+        </form>
+        <table class="table table-condensed table-striped ">
+            <thead><tr><th>Id</th><th>Ссылка</th><th>Ключ</th><th></th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Получение всех соответствий ссылок
+        async function GetLinks() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/getLinks", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // получаем данные
+                const links = await response.json();
+                let rows = document.querySelector("tbody");
+                links.forEach(link => {
+                    // добавляем полученные элементы в таблицу
+                    rows.append(row(link));
+                });
+            }
+        }
+        // Получение одного соответсвия ссылки и токена
+        async function GetLink(id) {
+            const response = await fetch("/getLink/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const link = await response.json();
+                const form = document.forms["linkForm"];
+                form.elements["id"].value = link.id;
+                form.elements["longAddress"].value = link.longAddress;
+                form.elements["token"].value = link.token;
+            }
+        }
+        // Добавление ссылки и токена
+        async function CreateLink(longAddress) {
+            const response = await fetch("/addLink?longAddress=" + encodeURIComponent(longAddress), {
+                method: "POST",
+                headers: { "Accept": "application/json"}
+            });
+            if (response.ok === true) {
+                const link = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(link));
+                const form = document.forms["linkForm"];
+                form.elements["longAddress"].value = link.longAddress;
+                form.elements["token"].value = window.location.origin + "/" + link.token;
+
+            }
+        }
+        // сброс формы
+        function reset() {
+            const form = document.forms["linkForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+        // создание строки для таблицы
+        function row(link) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", link.id);
+
+            const idTd = document.createElement("td");
+            idTd.append(link.id);
+            tr.append(idTd);
+
+            const longAddressTd = document.createElement("td");
+            longAddressTd.append(link.longAddress);
+            tr.append(longAddressTd);
+
+            const tokenTd = document.createElement("td");
+            tokenTd.append(link.token);
+            tr.append(tokenTd);
+
+            const linksTd = document.createElement("td");
+
+           
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+
+        // сброс значений формы
+        document.getElementById("reset").click(function (e) {
+
+            e.preventDefault();
+            reset();
+        })
+
+        // отправка формы
+        document.forms["linkForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["linkForm"];
+            const id = form.elements["id"].value;
+            const longAddress = form.elements["longAddress"].value;
+            const token = form.elements["token"].value;
+            if (id == 0)
+                CreateLink(longAddress, token);
+            else
+                EditLink(id, longAddress, token);
+        });
+
+        // загрузка ссылок
+        GetLinks();
+    </script>
+</body>
+</html>
