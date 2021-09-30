@@ -24,29 +24,44 @@ namespace API.Controllers
         }
 
         [HttpGet("getLinks")]
-        public async Task<IEnumerable<Link>> Get()
+        public async Task<ActionResult<IEnumerable<Link>>> Get()
         {
-            var links = await _linkService.GetLinksAsync();
-            return links;
+            try
+            {
+                return new ObjectResult(await _linkService.GetLinksAsync());
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpGet("getLink/{id}")]
         public async Task<ActionResult<Link>> Get(int id)
         {
-            var link = await _linkService.GetLinkByIdAsync(id);
-            if (link == null)
-                return NotFound();
-            return new ObjectResult(link);
+            try
+            {
+                var link = await _linkService.GetLinkByIdAsync(id);
+                if (link == null)
+                    return NotFound();
+                return link;
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
         [HttpGet("{token}")]
-        public IActionResult Get(string token)
+        public async Task<IActionResult> Get(string token)
         {
-            string longAddress = _linkService.GetLongAddressAsync(token);
-            if (longAddress == null)
+            try
+            {
+                return Redirect(await _linkService.GetLongAddressAsync(token));
+            }
+            catch
             {
                 return NotFound();
             }
-            return Redirect(_linkService.GetLongAddressAsync(token));
         }
 
         [HttpPost("addLink")]
@@ -56,8 +71,14 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            var link = await _linkService.AddLinkAsync(longAddress);
-            return Ok(link);
+            try
+            {
+                return await _linkService.AddLinkAsync(longAddress);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
