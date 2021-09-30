@@ -9,6 +9,6 @@ namespace API.Domain.Services
         Task<IEnumerable<Link>> GetLinksAsync();
         Task<Link> GetLinkByIdAsync(int id);
         Task<Link> AddLinkAsync(string longAddress);
-        string GetLongAddressAsync(string token);
+        Task<string> GetLongAddressAsync(string token);
     }
 }

@@ -16,15 +16,13 @@ namespace API.Domain.Services
         {
             _linkRepository = linkRepository;
         }
-        public Task<IEnumerable<Link>> GetLinksAsync()
+        public async Task<IEnumerable<Link>> GetLinksAsync()
         {
-            return _linkRepository.ListAsync();
+            return await _linkRepository.ListAsync();
         }
-        public Task<Link> GetLinkByIdAsync(int id)
+        public async Task<Link> GetLinkByIdAsync(int id)
         {
-            var link = _linkRepository.LinkByIdAsync(id);
-            if (link.Result == null)
-                return null;
+            var link = await _linkRepository.LinkByIdAsync(id);
             return link;
         }
         public async Task<Link> AddLinkAsync(string longAddress)
@@ -34,7 +32,7 @@ namespace API.Domain.Services
             if (!regex.IsMatch(longAddress)) 
             {
                 return null;
-            } 
+            }
             Link link;   
             if (!longAddress.StartsWith("https://"))
             {
@@ -57,14 +55,13 @@ namespace API.Domain.Services
                 link = new Link { LongAddress = longAddress, Token = Generate() };
             }
             return await _linkRepository.AddLinkAsync(link);
-
         }
-        public string GetLongAddressAsync(string token)
+        public async Task<string> GetLongAddressAsync(string token)
         {
-            var link = _linkRepository.LinkByTokenAsync(token);
-            if (link.Result == null)
+            var link = await _linkRepository.LinkByTokenAsync(token);
+            if (link == null)
                 return null;
-            return link.Result.LongAddress;
+            return link.LongAddress;
         }
 
         public string Generate()
