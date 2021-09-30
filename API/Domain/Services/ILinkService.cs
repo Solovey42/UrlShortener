@@ -10,9 +10,5 @@ namespace API.Domain.Services
         Task<Link> GetLinkByIdAsync(int id);
         Task<Link> AddLinkAsync(string longAddress);
         string GetLongAddressAsync(string token);
-
-        ///void Put(Link link);
-        ///void Delete(Task<Link> link);
-        string Generate();
     }
 }

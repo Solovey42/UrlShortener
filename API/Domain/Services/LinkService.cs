@@ -3,6 +3,7 @@ using API.Domain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace API.Domain.Services
@@ -28,6 +29,12 @@ namespace API.Domain.Services
         }
         public async Task<Link> AddLinkAsync(string longAddress)
         {
+
+            Regex regex = new Regex(@"((?![.,?!;:()]*(\s|$))[^\s]){2,}");
+            if (!regex.IsMatch(longAddress)) 
+            {
+                return null;
+            } 
             Link link;   
             if (!longAddress.StartsWith("https://"))
             {
@@ -60,12 +67,6 @@ namespace API.Domain.Services
             return link.Result.LongAddress;
         }
 
-/*        public void Delete(Task<Link> link)
-        {
-            _linkRepository.Delete(link);  
-
-        }*/
-
         public string Generate()
         {
             Random rd = new Random();
@@ -77,12 +78,5 @@ namespace API.Domain.Services
             }
             return new string(chars);
         }
-
-
-
-/*        public void Put(Link link)
-        {
-            _linkRepository.Put(link);
-        }*/
     }
 }

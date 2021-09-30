@@ -17,7 +17,7 @@ namespace API.Controllers
 
         private readonly ILinkService _linkService;
 
-        public HomeController(ILogger<HomeController> logger, /*LinksContext context, */ ILinkService linkService)
+        public HomeController(ILogger<HomeController> logger, ILinkService linkService)
         {
             _logger = logger;
             _linkService = linkService;
@@ -26,7 +26,6 @@ namespace API.Controllers
         [HttpGet("getLinks")]
         public async Task<IEnumerable<Link>> Get()
         {
-            ///return await _context.Links.ToListAsync();
             var links = await _linkService.GetLinksAsync();
             return links;
         }
@@ -34,7 +33,6 @@ namespace API.Controllers
         [HttpGet("getLink/{id}")]
         public async Task<ActionResult<Link>> Get(int id)
         {
-            ///Link link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
             var link = await _linkService.GetLinkByIdAsync(id);
             if (link == null)
                 return NotFound();
@@ -43,7 +41,6 @@ namespace API.Controllers
         [HttpGet("{token}")]
         public IActionResult Get(string token)
         {
-            ///var hostUrl = Request.Scheme + "://" + Request.Host.Value;
             string longAddress = _linkService.GetLongAddressAsync(token);
             if (longAddress == null)
             {
@@ -52,49 +49,15 @@ namespace API.Controllers
             return Redirect(_linkService.GetLongAddressAsync(token));
         }
 
-        [HttpPost("addLink/{*longAddress}")]
+        [HttpPost("addLink")]
         public async Task<ActionResult<Link>> Post(string longAddress)
         {
             if (longAddress == null)
             {
                 return BadRequest();
             }
-            ///_context.Links.Add(link);
-            ///await _context.SaveChangesAsync();
             var link = await _linkService.AddLinkAsync(longAddress);
             return Ok(link);
         }
-
-/*        [HttpPut]
-        public async Task<ActionResult<Link>> Put(Link link)
-        {
-            if (link == null)
-            {
-                return BadRequest();
-            }
-            if (*//*!_context.Links.Any(x => x.Id == link.Id)*//*_linkService.Contains(link))
-            {
-                return NotFound();
-            }
-            ///_context.Update(link);
-            ///await _context.SaveChangesAsync();
-            _linkService.Put(link);
-            return Ok(link);
-        }*/
-
-/*        [HttpDelete("{id}")]
-        public async Task<ActionResult<Link>> Delete(int id)
-        {
-            ///Link link = _context.Links.FirstOrDefault(x => x.Id == id);
-            var link = _linkService.Get(id); ///////////////////////////////////////////////тут не работает потому что возвращается Task
-            if (link == null)
-            {
-                return NotFound();
-            }
-            //_context.Links.Remove(link);
-            //await _context.SaveChangesAsync();
-            _linkService.Delete(link); 
-            return Ok(link);
-        }*/
     }
 }

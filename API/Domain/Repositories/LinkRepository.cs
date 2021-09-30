@@ -38,18 +38,5 @@ namespace API.Domain.Repositories
         {
             return await _context.Links.FirstOrDefaultAsync(x => x.Token == token);
         }
-
-
-        /*        public async void Delete(Task<Link> link)
-                {
-                    _context.Links.Remove(link);
-                    await _context.SaveChangesAsync();
-                }*/
-
-        /*        public async void Put(Link link)
-                {
-                    _context.Update(link);
-                    await _context.SaveChangesAsync();
-                }*/
     }
 }

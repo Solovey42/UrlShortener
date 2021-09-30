@@ -10,8 +10,6 @@ namespace API.Domain.Repositories
         Task<Link> LinkByIdAsync(int id);
         Task<Link> AddLinkAsync(Link link);
         Task<Link> LinkByTokenAsync(string token);
-        ///void Put(Link link);
-        ///void Delete(Task<Link> link);
         Task<Link> Contains(string longAddress);
     }
 }
