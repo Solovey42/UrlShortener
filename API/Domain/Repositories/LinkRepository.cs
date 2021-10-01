@@ -24,11 +24,7 @@ namespace API.Domain.Repositories
         }
         public async Task<Link> LinkByIdAsync(int id)
         {
-            var link = await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
-            if (link == null)
-                return null;
-            else
-                return link;
+            return await _context.Links.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Link> AddLinkAsync(Link link)

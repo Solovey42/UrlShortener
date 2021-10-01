@@ -44,7 +44,6 @@ namespace API.Domain.Services
                 if (link != null)
                 {
                     return link;
-
                 }
                 link = new Link { LongAddress = longAddress, Token = Generate() };
             }
