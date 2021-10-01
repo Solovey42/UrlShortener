@@ -65,15 +65,13 @@ namespace API.Controllers
         }
 
         [HttpPost("addLink")]
-        public async Task<ActionResult<Link>> Post(string longAddress)
+        public async Task<ActionResult<Link>> Post(Link link)
         {
-            if (longAddress == null)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
-                return await _linkService.AddLinkAsync(longAddress);
+                return await _linkService.AddLinkAsync(link.LongAddress);
             }
             catch
             {

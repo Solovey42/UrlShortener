@@ -9,6 +9,8 @@
 <body>
     <div class="text-center">
         <h2>Сервис минификации ссылок</h2>
+        <div id="errors" class="alert alert-danger" style="display:none;">
+        </div>
         <form name="linkForm">
             <input type="hidden" name="id" value="0" />
             <div class="form-group col-md-auto">
@@ -65,9 +67,12 @@
         }
         // Добавление ссылки и токена
         async function CreateLink(longAddress) {
-            const response = await fetch("/addLink?longAddress=" + encodeURIComponent(longAddress), {
+            const response = await fetch("/addLink",  {
                 method: "POST",
-                headers: { "Accept": "application/json"}
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    longAddress: longAddress
+                })
             });
             if (response.ok === true) {
                 const link = await response.json();
@@ -78,12 +83,32 @@
                 form.elements["token"].value = window.location.origin + "/" + link.token;
 
             }
+            else {
+                const errorData = await response.json();
+                console.log("errors", errorData);
+                if (errorData) {
+                    // ошибки вследствие валидации по атрибутам
+                    if (errorData.errors) {
+                        if (errorData.errors["LongAddress"]) {
+                            addError(errorData.errors["LongAddress"]);
+                        }
+                    }
+                }
+                document.getElementById("errors").style.display = "block";
+            }
         }
         // сброс формы
         function reset() {
             const form = document.forms["linkForm"];
             form.reset();
             form.elements["id"].value = 0;
+        }
+        function addError(errors) {
+            errors.forEach(error => {
+                const p = document.createElement("p");
+                p.append(error);
+                document.getElementById("errors").append(p);
+            });
         }
         // создание строки для таблицы
         function row(link) {
