@@ -34,7 +34,6 @@ namespace API.Domain.Services
                 if (link != null)
                 {
                     return link;
-
                 }
                 link = new Link { LongAddress = "https://"+longAddress, Token = Generate() };
             }
