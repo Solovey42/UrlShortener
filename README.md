@@ -14,4 +14,6 @@ RestAPI сервис минификации ссылок с пользовате
     POST:
     + addLink?longAddress={url}         Добавляет новое соответсвие длинной ссылки с ключом
 Скриншот приложения:
+
+
 ![Alt text](https://github.com/Solovey42/UrlShortener/blob/main/Readme_assets/mainPage.png?raw=true "Title")
